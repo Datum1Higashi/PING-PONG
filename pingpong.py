@@ -60,6 +60,9 @@ Player_2 = Player("racket.png", win_width -50,0, 30, 110, 5)
 bounce_ball = Ball("we go band4band.webp", win_width / 2, win_height / 2, 50, 50, 2)
 
 bg = transform.scale(image.load("TEST.jpg"), (win_width, win_height))
+font1 = font.Font(None, 45)
+lose_player1 = font1.render('PLAYER 1 LOSES!', True, (180, 0, 0))
+lose_player2 = font1.render('PLAYER 2 LOSES!', True, (180, 0, 0))
 
 clock = time.Clock()
 is_playing = True
@@ -84,6 +87,14 @@ while is_playing:
         bounce_ball.update()
         bounce_ball.racket_check(Player_1)
         bounce_ball.racket_check(Player_2)
+
+        if bounce_ball.rect.x < 5:
+            window.blit(lose_player2, (win_width/2, win_height/2))
+            is_finished = True
+
+        if bounce_ball.rect.x > win_width - 10:
+            window.blit(lose_player1, (win_width/2, win_height/2))
+            is_finished = True
 
     display.update()
     clock.tick(FPS)
