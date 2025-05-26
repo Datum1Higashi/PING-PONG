@@ -38,14 +38,32 @@ class Player(GameSprite):
         if keys[K_DOWN] and self.rect.y < win_height - 80:
             self.rect.y += self.speed
 
+# Ball
+class Ball(GameSprite):
+    direction_x = 1
+    direction_y = 1
+
+    def update(self):
+        self.rect.x += (self.direction_x * self.speed)
+        self.rect.y += (self.direction_y * self.speed)
+
+        if self.rect.y < 5 or self.rect.y > win_height -50:
+            self.direction_y *= -1
+
+    def racket_check(self, player):
+        if self.rect.colliderect(player.rect):
+            self.direction_x *= -1
+
 Player_1 = Player("racket.png", 50, 0, 30, 110, 5)
 Player_2 = Player("racket.png", win_width -50,0, 30, 110, 5)
+
+bounce_ball = Ball("we go band4band.webp", win_width / 2, win_height / 2, 50, 50, 2)
 
 bg = transform.scale(image.load("TEST.jpg"), (win_width, win_height))
 
 clock = time.Clock()
 is_playing = True
-FPS = 165
+FPS = 60
 is_finished = False
 
 # Main Game Loop
@@ -61,6 +79,11 @@ while is_playing:
 
         Player_2.reset()
         Player_2.update_right()
+
+        bounce_ball.reset()
+        bounce_ball.update()
+        bounce_ball.racket_check(Player_1)
+        bounce_ball.racket_check(Player_2)
 
     display.update()
     clock.tick(FPS)
